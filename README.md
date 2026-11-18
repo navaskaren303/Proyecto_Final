@@ -94,87 +94,72 @@ RNF11 El sistema debe visualizarse correctamente en computadores de escritorio y
 RNF12 El sistema debe validar los datos ingresados por los usuarios para evitar registros incompletos o incorrectos. 
 
 ## Diagrama de clase 
-
-<img width="1170" height="464" alt="image" src="https://github.com/user-attachments/assets/1b636402-5ba3-493e-9f83-37e243e6b762" />
-
+<img width="861" height="538" alt="diagrama de clase " src="https://github.com/user-attachments/assets/8849f6de-ab1e-422d-80d6-257776cd3e9f" />
 ## Diagrama de caso de uso
-
-
-
-
-
-
-
-
-
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/e745405c-a089-407f-967b-9b896521c24d" />
 
 ## Base de Datos
-CREATE DATABASE IF NOT EXISTS zapateria
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
 
+CREATE DATABASE IF NOT EXISTS zapateria;
 USE zapateria;
 
 CREATE TABLE rol (
-    id_rol INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_rol VARCHAR(50) NOT NULL
-) ENGINE=InnoDB;
+    idRol INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE usuario (
-    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE,
     login VARCHAR(50) NOT NULL UNIQUE,
     clave VARCHAR(255) NOT NULL,
-    id_rol INT NOT NULL,
-    CONSTRAINT fk_usuario_rol FOREIGN KEY (id_rol) 
-        REFERENCES rol(id_rol) 
-        ON UPDATE CASCADE 
+    idRol INT NOT NULL,
+    CONSTRAINT fk_usuario_rol FOREIGN KEY (idRol) REFERENCES rol(idRol)
+        ON UPDATE CASCADE
         ON DELETE RESTRICT
-) ENGINE=InnoDB;
+);
 
 CREATE TABLE producto (
-    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    idProducto INT AUTO_INCREMENT PRIMARY KEY,
     marca VARCHAR(50) NOT NULL,
     modelo VARCHAR(50) NOT NULL,
-    color VARCHAR(30) NOT NULL,
-    talla INT NOT NULL,
-    cantidad INT NOT NULL DEFAULT 0
-) ENGINE=InnoDB;
+    color VARCHAR(30),
+    talla VARCHAR(20),
+    precio DECIMAL(10, 2) NOT NULL,
+    cantidadDisponible INT NOT NULL DEFAULT 0
+);
 
 CREATE TABLE movimiento_inventario (
-    id_movimiento INT AUTO_INCREMENT PRIMARY KEY,
-    id_producto INT NOT NULL,
-    id_usuario INT NOT NULL,
-    tipo_movimiento VARCHAR(20) NOT NULL,
+    idMovimiento INT AUTO_INCREMENT PRIMARY KEY,
+    tipoMovimiento VARCHAR(50) NOT NULL,
     cantidad INT NOT NULL,
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_movimiento_producto FOREIGN KEY (id_producto) 
-        REFERENCES producto(id_producto) 
-        ON UPDATE CASCADE 
+    idUsuario INT NOT NULL,
+    idProducto INT NOT NULL,
+    CONSTRAINT fk_movimiento_usuario FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario)
+        ON UPDATE CASCADE
         ON DELETE RESTRICT,
-    CONSTRAINT fk_movimiento_usuario FOREIGN KEY (id_usuario) 
-        REFERENCES usuario(id_usuario) 
-        ON UPDATE CASCADE 
+    CONSTRAINT fk_movimiento_producto FOREIGN KEY (idProducto) REFERENCES producto(idProducto)
+        ON UPDATE CASCADE
         ON DELETE RESTRICT
-) ENGINE=InnoDB;
+);
 
-INSERT INTO rol (nombre_rol) VALUES 
-('Administrador'),
-('Empleado');
+INSERT INTO rol (idRol, nombre) VALUES
+(1, 'Administrador'),
+(2, 'Empleado');
 
-INSERT INTO usuario (nombre, correo, login, clave, id_rol) VALUES 
-('Carlos Mendoza', 'carlos.mendoza@gmail.com', 'Carlos', 'admin123', 1),
-('Laura Gómez', 'laura.gomez@hotmail.com', 'Laura', 'empleado', 2);
+INSERT INTO usuario (nombre, correo, login, clave, idRol) VALUES
+('Jose Carrillo', 'josecarrillo@gmail.com', 'jose', 'admin123', 1),
+('Carlos Pérez', 'carlos.perez@hotmail.com', 'carlos', '12345', 2);
 
-INSERT INTO producto (marca, modelo, color, talla, cantidad) VALUES 
-('Nike', 'Air Force 1', 'Blanco', 40, 25),
-('Adidas', 'Ultraboost', 'Negro', 42, 15),
-('Vans', 'Old Skool', 'Azul Marino', 38, 30),
-('Converse', 'Chuck Taylor', 'Rojo', 39, 18);
+INSERT INTO producto (marca, modelo, color, talla, precio, cantidadDisponible) VALUES
+('Nike', 'Air Force 1', 'Blanco', '38', 350000.00, 15),
+('Adidas', 'Ultraboost', 'Negro', '37', 420000.00, 8),
+('Puma', 'RS-X', 'Multicolor', '39', 290000.00, 12),
+('Converse', 'Chuck Taylor', 'Rojo', '36', 220000.00, 20);
 
-INSERT INTO movimiento_inventario (id_producto, id_usuario, tipo_movimiento, cantidad, fecha) VALUES 
-(1, 2, 'Entrada', 10, '2026-11-15 09:30:00'),
-(2, 2, 'Salida', 2, '2026-11-16 14:15:00'),
-(3, 1, 'Entrada', 15, '2026-11-16 16:45:00'),
-(1, 2, 'Salida', 1, '2026-11-17 10:05:00');
+INSERT INTO movimiento_inventario (tipoMovimiento, cantidad, idUsuario, idProducto) VALUES
+('Entrada', 15, 1, 1),
+('Entrada', 8, 1, 2),
+('Salida', 2, 2, 1);
