@@ -94,7 +94,8 @@ RNF11 El sistema debe visualizarse correctamente en computadores de escritorio y
 RNF12 El sistema debe validar los datos ingresados por los usuarios para evitar registros incompletos o incorrectos. 
 
 ## Diagrama de clase 
-<img width="861" height="538" alt="diagrama de clase " src="https://github.com/user-attachments/assets/8849f6de-ab1e-422d-80d6-257776cd3e9f" />
+<img width="911" height="553" alt="image" src="https://github.com/user-attachments/assets/96bb72f1-118a-4924-8c51-43ec86f6d38e" />
+
 ## Diagrama de caso de uso
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/e745405c-a089-407f-967b-9b896521c24d" />
 
